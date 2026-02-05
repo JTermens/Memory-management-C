@@ -73,13 +73,16 @@ ERRORS
 EOF
 )
 
-HELP_MESSAGE = "See build.sh --help for the documentation" 
+HELP_MESSAGE="See build.sh --help for the documentation" 
 
 COMMON_CFLAGS=(-std=c23 -Wall -Wextra -Wconversion -Wsign-conversion)
 RELEASE_CFLAGS=(-O2 -DNDEBUG)
 DEBUG_CFLAGS=(-ggdb -pedantic -Werror -Wno-error=pedantic)
 
 set -eou pipefail
+
+# Find the root of the repository
+REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 MUNIT=0
 POSITIONAL=()
@@ -148,14 +151,14 @@ esac
 # Resolve target
 TARGET="${2:-}"
 
-SRC_ROOT="/workspace/src"
+SRC_ROOT="${REPO_ROOT}/src"
 TARGET_PATH="$SRC_ROOT/$TARGET"
 
-OUT_ROOT="/workdir/build"
+OUT_ROOT="${REPO_ROOT}/build"
 OUTPUT="$OUT_ROOT/$MODE"
 
 if [[ ! -e "$TARGET_PATH" ]]; then
-    echo "Target not found: $TARGET" >&2
+    echo "Target not found: $TARGET_PATH" >&2
     echo "$HELP_MESSAGE" >&2
     exit 2
 fi
@@ -195,7 +198,7 @@ fi
 
 # Add munit.c if needed
 if [[ "$MUNIT" -eq 1 ]]; then
-    SOURCES+=("/workspace/munit/munit.c")
+    SOURCES+=("${REPO_ROOT}/munit/munit.c")
 fi
 
 

@@ -3,45 +3,42 @@
 # & test C scripts
 #
 # C-devenv is designed as an interactive environment for development and
-# exploration using C. It conceptually separates the build and run stages with 
-# different build.sh, run.sh and test.sh scripts, while it also include 
-# debugging and diagnose tools.
+# exploration using C. It separates the minimal build toolchain from the 
+# runtime tools into two layers: builder & analyzer, respectively. It also does
+# not define a working diretcory as it is designed to work as a base image for
+# devcontainers.
 # 
 # This image is intended as a development container, not a production runtime.
 # It intentionally includes both build and runtime tooling to maximize
 # transparency and reduce cognitive overhead during exploration.
 #
 # Author: Joan Térmens (https://github.com/JTermens
-# Last update: 30 Jan 2026
+# Last update:5 Feb 2026
 # =============================================================================
 
-# Lightweight base image with
-glibc FROM debian:bookworm-slim
-
-# Set project root inside the container
-WORKDIR /workspace 
-
-# Create an out-of-tree build directory (ephemeral)
-RUN mkdir build
+# Lightweight base image with glibc 
+FROM debian:bookworm-slim AS builder
 
 # Install a minimal toolchain for building C programs
 RUN apt-get update && apt-get install -y \
     gcc \
     # make \
-    binutils \
+    # binutils \
     libc6-dev \
     git \
-    gdb \
-    strace \
-    valgrind \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* 
 
-# Note:
-# The builder only assumes that the following paths exist at runtime:
-# - /workspace/src -> bind-mounted from host
-# - /workspace/scripts -> bind-mounted from host
-# - /workspace/munit -> bind-mounted (read-only) from host
-
 # Bash shell at the container 
+CMD ["bash"]
+
+FROM builder AS analyzer
+
+RUN apt-get update && apt-get install -y \
+    gdb \
+    strace \
+    valgrind \
+    && apt-get-clean \
+    && rm -rf /var/lib/apt/lists/*
+
 CMD ["bash"]

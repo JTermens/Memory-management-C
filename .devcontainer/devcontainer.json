@@ -1,0 +1,9 @@
+{
+    "name": "C-devenv",
+    "build": {
+        "dockerFile": "Dockerfile",
+        "target": "builder",
+        "context": ".."
+    },
+    "postCreateCommand": "mkdir -p build"
+}
