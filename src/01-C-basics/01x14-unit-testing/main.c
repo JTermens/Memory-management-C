@@ -1,4 +1,4 @@
-#include "../../munit/munit.h"
+#include "../../../munit/munit.h"
 #include "exercise.h"
 
 static MunitResult test_get_average()

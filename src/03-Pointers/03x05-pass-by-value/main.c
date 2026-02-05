@@ -1,4 +1,4 @@
-#include "../../munit/munit.h"
+#include "../../../munit/munit.h"
 #include "coordinate.h"
 
 coordinate_t new_coordinate(int x, int y, int z)

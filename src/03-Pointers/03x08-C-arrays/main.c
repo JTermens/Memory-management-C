@@ -1,4 +1,4 @@
-#include "../../munit/munit.h"
+#include "../../../munit/munit.h"
 #include "exercise.h"
 
 static MunitResult test_update_file_basic()
@@ -40,3 +40,4 @@ int main()
   static const MunitSuite suite = {(char *)"update_file", tests, NULL, 1, MUNIT_SUITE_OPTION_NONE};
 
   return munit_suite_main(&suite, NULL, 0, NULL);
+}

@@ -1,4 +1,4 @@
-#include "../../munit/munit.h"
+#include "../../../munit/munit.h"
 #include "coord.h"
 
 static MunitResult test_new_coordinate1()
